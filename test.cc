@@ -6,15 +6,13 @@
 
 using namespace std;
 
-unsigned char light_data[512];
-
 void fps_sleep(int fps);
 
 int main(int argc, char** argv) {
-	
+
+	unsigned char light_data[512;
 	DMX512Connection * dmx = new DMX512Connection("172.16.1.101");
 	double loc = 0.0;
-	char on = 1;
 
 	while(true) {
 
