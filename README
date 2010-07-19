@@ -1,1 +1,5 @@
 dmx512-framework for addressing color-kinetics lights
+
+deps:
+	libfftw3
+	libjack
