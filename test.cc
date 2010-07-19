@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
 	}
 
 	delete dmx;
-
+	dmx = 0;
 	return 0;
 }
 
