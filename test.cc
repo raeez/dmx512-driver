@@ -25,6 +25,9 @@ int main(int argc, char** argv) {
 		dmx->output_color_triples(light_data, 100);
 		loc += 0.01;
 	}
+
+	delete dmx;
+
 	return 0;
 }
 
