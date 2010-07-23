@@ -22,11 +22,10 @@ typedef struct {
 typedef struct {
 	KiNET_Hdr hdr;
 	unsigned char port;
-	//unsigned char flags;
 	unsigned short timerVal;
 	unsigned int uni;
-	//DWord numChannels;
-	// need to add dmx data here
+	//END 20-byte header
+	//START 512-byte dmx data
 } KiNET_DMXout;
 
 typedef struct {

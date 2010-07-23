@@ -74,13 +74,12 @@ void DMX512Connection::output_color_triples(unsigned char* triples, int lights) 
 	for(int i = ((3*lights)+1); i < 512; i++) {
 		buf[i] = 0;
 	}
-
-	//icolorfx compatibility
+	
+	//footer
 	buf[511] = 255;
 	buf[512] = 191;
 
-	//dmx512(buf, 514);
-	dmx512(buf, 513);
+	dmx512(buf, 513); // 533 bytes total (20 byte header + 512 bytes data)
 }
 
 void DMX512Connection::set_light(unsigned char * triples, int light, double r, double g, double b) {
