@@ -33,21 +33,26 @@ DMX512Connection::DMX512Connection(char * ip_addr) {
 	dmx_handle = next_handle++;
 }
 
-void DMX512Connection::dmx512(unsigned char *data, int dlen) {
+void DMX512Connection::dmx512(unsigned char * data, int dlen) {
 	int i;
 	int len;
 	unsigned char buf[2048];
-	KiNET_DMXout *kdmxout=(KiNET_DMXout *)buf;
+	KiNET_DMXout * kdmxout= (KiNET_DMXout *)buf;
 
-	kdmxout->hdr.magic=KINET_MAGIC;
-	kdmxout->hdr.ver=KINET_VERSION;
-	kdmxout->hdr.type=KTYPE_DMXOUT;
-	kdmxout->hdr.seq=0;
-	kdmxout->port=0;
-	kdmxout->timerVal=0;
-	kdmxout->uni=-1;
+	kdmxout->hdr.magic = KINET_MAGIC;
+	kdmxout->hdr.ver = KINET_VERSION;
+	kdmxout->hdr.type = KTYPE_DMXOUT;
+	kdmxout->hdr.seq = 0;
 
-	len=sizeof(KiNET_DMXout)+dlen;
+	kdmxout->port = 0;
+	kdmxout->timerVal = 0;
+	kdmxout->uni= -1;
+
+	len = sizeof(KiNET_DMXout)+dlen;
+
+	cout << "color kinetics datagram header size (bytes): " << sizeof(KiNET_DMXout) << endl;
+	cout << "final packet size (bytes): " << len << endl;
+
 	memcpy(buf+sizeof(KiNET_DMXout),data,dlen);
 
 	if (sendto(handles[dmx_handle].sock,buf,len,0,(struct sockaddr *)&handles[dmx_handle].destsa,sizeof(handles[dmx_handle].destsa))==-1) {
@@ -71,10 +76,11 @@ void DMX512Connection::output_color_triples(unsigned char* triples, int lights) 
 	}
 
 	//icolorfx compatibility
-	buf[512]=255;
-	buf[513]=191;
+	buf[511] = 255;
+	buf[512] = 191;
 
-	dmx512(buf, 514);
+	//dmx512(buf, 514);
+	dmx512(buf, 513);
 }
 
 void DMX512Connection::set_light(unsigned char * triples, int light, double r, double g, double b) {

@@ -13,18 +13,18 @@
 #include <string>
 
 typedef struct {
-	unsigned long magic;
+	unsigned int magic;
 	unsigned short ver;
 	unsigned short type;
-	unsigned long seq;
+	unsigned int seq;
 } KiNET_Hdr;
 
 typedef struct {
 	KiNET_Hdr hdr;
 	unsigned char port;
-	unsigned char flags;
+	//unsigned char flags;
 	unsigned short timerVal;
-	unsigned long uni;
+	unsigned int uni;
 	//DWord numChannels;
 	// need to add dmx data here
 } KiNET_DMXout;
