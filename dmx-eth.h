@@ -17,10 +17,6 @@ typedef struct {
 	unsigned short ver;
 	unsigned short type;
 	unsigned int seq;
-} KiNET_Hdr;
-
-typedef struct {
-	KiNET_Hdr hdr;
 	unsigned char port;
 	unsigned short timerVal;
 	unsigned int uni;

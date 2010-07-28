@@ -39,10 +39,10 @@ void DMX512Connection::dmx512(unsigned char * data, int dlen) {
 	unsigned char buf[2048];
 	KiNET_DMXout * kdmxout= (KiNET_DMXout *)buf;
 
-	kdmxout->hdr.magic = KINET_MAGIC;
-	kdmxout->hdr.ver = KINET_VERSION;
-	kdmxout->hdr.type = KTYPE_DMXOUT;
-	kdmxout->hdr.seq = 0;
+	kdmxout->magic = KINET_MAGIC;
+	kdmxout->ver = KINET_VERSION;
+	kdmxout->type = KTYPE_DMXOUT;
+	kdmxout->seq = 0;
 
 	kdmxout->port = 0;
 	kdmxout->timerVal = 0;
