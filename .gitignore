@@ -1,3 +1,6 @@
+# Temporary files
+*.sw[a-z]
+
 # Compiled Object files
 *.slo
 *.lo
@@ -10,3 +13,6 @@
 *.lai
 *.la
 *.a
+
+# Compiled Targets
+test
