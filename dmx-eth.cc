@@ -19,7 +19,6 @@ DMX512Connection::DMX512Connection(char * ip_address) {
 }
 
 void DMX512Connection::dmx512(int dlen) {
-	int i;
 	unsigned char buffer[2048]; // 2K for good measure
 	memset(buffer, 0, 2048);
 
@@ -32,7 +31,7 @@ void DMX512Connection::dmx512(int dlen) {
 
 	kdmxout->port = 0;
 	kdmxout->timerVal = 0;
-	kdmxout->uni= -1;
+	kdmxout->uni = -1;
 
 	int len = sizeof(KiNET_DMXout) + dlen;
 
@@ -41,7 +40,7 @@ void DMX512Connection::dmx512(int dlen) {
 
 	memcpy(buffer + sizeof(KiNET_DMXout), light_data, dlen);
 
-	if (sendto(handle.sock, buffer, len,0,(struct sockaddr *)&handle.destsa, sizeof(handle.destsa))==-1) {
+	if (sendto(handle.sock, buffer, len, 0, (struct sockaddr *)&handle.destsa, sizeof(handle.destsa))==-1) {
 		cerr << "Error when attempting to send data over dmx512!" << endl;
 		exit(1);
 	}
@@ -56,26 +55,21 @@ void DMX512Connection::output_color_light_data(int lights) {
 		buffer[3*i+3] = light_data[3*i+2];
 	}
 	
-	// fill the rest of the buffer
-	for(int i = ((3*lights)+1); i < 512; i++) {
-		buffer[i] = 0;
-	}
-	
 	//footer
 	buffer[511] = 255;
 	buffer[512] = 191;
 
-	dmx512(513); // 533 bytes total (20 byte header + 512 bytes data)
+	dmx512(513); // 533 octet size total (20 byte header + 512 bytes data)
 }
 
-void DMX512Connection::set_light(int light, double r, double g, double b) {
+void DMX512Connection::set_light(int light_index, double r, double g, double b) {
 	r = r > 0 ? (r < 1 ? r : 1) : 0;
 	g = g > 0 ? (g < 1 ? g : 1) : 0;
 	b = b > 0 ? (b < 1 ? b : 1) : 0;
 
-	light_data[3 * light] = (unsigned char) (255.0 * pow(r, 0.8));
-	light_data[3 * light + 1] = (unsigned char) (255.0 * pow(g, 0.8));
-	light_data[3 * light + 2] = (unsigned char) (255.0 * pow(b, 0.8));
+	light_data[3 * light_index] = (unsigned char) (255.0 * pow(r, 0.8));
+	light_data[3 * light_index + 1] = (unsigned char) (255.0 * pow(g, 0.8));
+	light_data[3 * light_index + 2] = (unsigned char) (255.0 * pow(b, 0.8));
 }
 
 void DMX512Connection::set_hue_light(int light, double hue, double bright, double sat) {
