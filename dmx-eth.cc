@@ -22,26 +22,27 @@ void DMX512Connection::dmx512(int dlen) {
 	unsigned char buffer[2048]; // 2K for good measure
 	memset(buffer, 0, 2048);
 
-	KiNET_DMXout * kdmxout = (KiNET_DMXout *)buffer;
+	DMX_Header * dmxout = (DMX_Header *)buffer;
 
-	kdmxout->magic = INET_MAGIC;
-	kdmxout->ver = INET_VERSION;
-	kdmxout->type = TYPE_DMXOUT;
-	kdmxout->seq = 0;
+	dmxout->magic = INET_MAGIC;
+	dmxout->ver = INET_VERSION;
+	dmxout->type = TYPE_DMXOUT;
+	dmxout->seq = 0;
 
-	kdmxout->port = 0;
-	kdmxout->timerVal = 0;
-	kdmxout->uni = -1;
+	dmxout->port = 0;
+	dmxout->timerVal = 0;
+	dmxout->uni = -1;
 
-	int len = sizeof(KiNET_DMXout) + dlen;
+	int len = sizeof(DMX_Header) + dlen;
 
-	cerr << "color kinetics datagram header size (octets): " << sizeof(KiNET_DMXout) << endl;
-	cerr << "final packet size (octets): " << len << endl;
+	printf("buffer pointer: 0x%0x\n", buffer);
+	printf("color kinetics datagram header size: %d(octets)", sizeof(DMX_Header));
+	printf("final packet size: %d(octets)\n", len);
 
-	memcpy(buffer + sizeof(KiNET_DMXout), light_data, dlen);
+	memcpy(buffer + sizeof(DMX_Header), light_data, dlen);
 
 	if (sendto(handle.sock, buffer, len, 0, (struct sockaddr *)&handle.destsa, sizeof(handle.destsa))==-1) {
-		cerr << "Error when attempting to send data over dmx512!" << endl;
+		cerr << "Error when attempting to send data!" << endl;
 		exit(1);
 	}
 }

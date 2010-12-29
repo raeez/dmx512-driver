@@ -27,7 +27,7 @@ typedef struct {
 	unsigned int uni;
 	//END 20-byte header
 	//START 512-byte dmx data
-} KiNET_DMXout;
+} DMX_Header;
 
 typedef struct {
 	int sock;
