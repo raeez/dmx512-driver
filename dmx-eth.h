@@ -12,6 +12,11 @@
 #include <iostream>
 #include <string>
 
+#define INET_UDP_PORT 6038
+#define INET_VERSION 0x0001
+#define INET_MAGIC 0x4adc0104
+#define TYPE_DMXOUT 0x0101
+
 typedef struct {
 	unsigned int magic;
 	unsigned short ver;
@@ -34,17 +39,16 @@ public:
 	DMX512Connection(char * ip_addr);
 	~DMX512Connection() {}
 
-	void output_color_triples(unsigned char* triples, int lights);
-	void set_light(unsigned char * triples, int light, double r, double g, double b);
-	void set_hue_light(unsigned char * triples, int light, double hue, double bright, double sat);
+	void output_color_light_data(int lights);
+	void set_light(int light_index, double red, double green, double blue);
+	void set_hue_light(int light_index, double hue, double brightness, double saturation);
 
 private:
-	DMX_Handle handles[10];
-	int next_handle;
+	unsigned char light_data[512];
 
-	int dmx_handle;
+	DMX_Handle handle;
 
-	void dmx512(unsigned char *data, int dlen);
+	void dmx512(int dlen);
 };
 
 #endif
