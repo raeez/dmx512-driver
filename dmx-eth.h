@@ -40,6 +40,7 @@ public:
 	~DMX512Connection() {}
 
 	void output_color_light_data(int lights);
+	void print_color_light_data();
 	void set_light(int light_index, double red, double green, double blue);
 	void set_hue_light(int light_index, double hue, double brightness, double saturation);
 

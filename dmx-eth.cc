@@ -22,30 +22,55 @@ void DMX512Connection::dmx512(int dlen) {
 	unsigned char buffer[2048]; // 2K for good measure
 	memset(buffer, 0, 2048);
 
-	DMX_Header * dmxout = (DMX_Header *)buffer;
+	DMX_Header * hdr = (DMX_Header *)buffer;
 
-	dmxout->magic = INET_MAGIC;
-	dmxout->ver = INET_VERSION;
-	dmxout->type = TYPE_DMXOUT;
-	dmxout->seq = 0;
+	hdr->magic = INET_MAGIC;
+	hdr->ver = INET_VERSION;
+	hdr->type = TYPE_DMXOUT;
+	hdr->seq = 0;
 
-	dmxout->port = 0;
-	dmxout->timerVal = 0;
-	dmxout->uni = -1;
+	hdr->port = 0;
+	hdr->timerVal = 0;
+	hdr->uni = -1;
 
 	int len = sizeof(DMX_Header) + dlen;
 
-	printf("buffer pointer: 0x%0x\n", buffer);
-	printf("color kinetics datagram header size: %d(octets)", sizeof(DMX_Header));
-	printf("final packet size: %d(octets)\n", len);
-
 	memcpy(buffer + sizeof(DMX_Header), light_data, dlen);
 
-	if (sendto(handle.sock, buffer, len, 0, (struct sockaddr *)&handle.destsa, sizeof(handle.destsa))==-1) {
-		cerr << "Error when attempting to send data!" << endl;
+	struct sockaddr * sock_addr_ptr = (struct sockaddr *)&handle.destsa;
+	int dest_sock_addr_size = sizeof(handle.destsa);
+
+	if  (sendto(handle.sock, buffer, len, 0, sock_addr_ptr, dest_sock_addr_size) == -1) {
+		printf("sendto(0x%0x, 0x%0x, 0x%0x, 0x%0x, 0x%0x, 0x%0x)\n", handle.sock, buffer, len, 0, sock_addr_ptr, dest_sock_addr_size);
+		cerr << "sendto returned -1!" << endl;
+		print_color_light_data();
 		exit(1);
 	}
 }
+
+void DMX512Connection::print_color_light_data() {
+	printf("-----------------------------  Contents of Buffer  --------------------------------\n");
+	int line_length = 16;
+
+	printf("| ");
+
+	for (int i = 0; i < 512; i++) {
+		printf("0x%02x", light_data[i]);
+
+		if ((i+1) % line_length == 0) {
+		
+			printf(" |\n");
+			if (i != 511)
+				printf("| ");
+		}
+		else
+		{
+			printf(" ");
+		}
+	}
+	printf("-----------------------------------------------------------------------------------\n");
+}
+
 void DMX512Connection::output_color_light_data(int lights) {
 	unsigned char buffer[2048]; // 2K for good measure
 	memset(buffer, 0, 2048);
